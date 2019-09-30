@@ -2,7 +2,98 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@model HttpRequestViewModel
+
+<h1 class="pb-3">Input</h1>
+<form method="post">
+    <div>
+        <div class="form-group row">
+            <label class="col-sm-1" asp-for="Method"></label>
+            <select class="form-control col-sm-1" asp-for="Method" asp-items="Model.Methods"></select>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-1" asp-for="Url"></label>
+            <input class="form-control col-sm-11" asp-for="Url" />
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-11"><span asp-validation-for="Url"></span></div>
+        </div>
+        <nav class="pb-3">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-headers-tab" data-toggle="tab" href="#nav-headers" role="tab" aria-controls="nav-headers" aria-selected="true">Headers</a>
+                <a class="nav-item nav-link" id="nav-body-tab" data-toggle="tab" href="#nav-body" role="tab" aria-controls="nav-body" aria-selected="false">Body</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-headers" role="tabpanel" aria-labelledby="nav-headers-tab">
+                <div class="form-group">
+                    <textarea class="form-control" asp-for="RequestHeaders" rows="5"></textarea>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="nav-body" role="tabpanel" aria-labelledby="nav-body-tab">
+                <div class="form-group row">
+                    <label class="col-sm-2" asp-for="RequestContentType"></label>
+                    <select class="form-control col-sm-10" asp-for="RequestContentType" asp-items="Model.ContentTypes"></select>
+                </div>
+
+                <div class="form-group">
+                    <textarea class="form-control" asp-for="RequestBody" rows="10"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" asp-controller="Home" asp-action="SendRequest">Send</button>
+</form>
+
+<hr />
+<h1 class="pb-3">Output</h1>
+@if (!string.IsNullOrEmpty(Model.ErrorText))
+{
+    <div class="row alert alert-danger pb-3" role="alert">
+        @Html.DisplayText("ErrorText")
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ResponseCodeText))
+{
+    <div class="row pb-3">
+        <div class="col-sm-4">
+            <h5>Status: @Html.DisplayText("ResponseCode") (@Html.DisplayText("ResponseCodeText"))</h5>
+        </div>
+        <div class="col-sm-4">
+            <h5> Time: @Html.DisplayText("ResponseTimeMilliseconds") ms</h5>
+        </div>
+        <div class="col-sm-4">
+            <h5> Size: @Html.DisplayText("ResponseBodyLength") bytes</h5>
+        </div>
+    </div>
+
+    <nav class="pb-3">
+        <div class="nav nav-tabs" id="nav-tab-output" role="tablist">
+            <a class="nav-item nav-link active" id="nav-body-output-tab" data-toggle="tab" href="#nav-body-output" role="tab" aria-controls="nav-body-output" aria-selected="true">Body</a>
+            <a class="nav-item nav-link" id="nav-headers-output-tab" data-toggle="tab" href="#nav-headers-output" role="tab" aria-controls="nav-headers-output" aria-selected="true">Headers</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tab-output-content">
+        <div class="tab-pane fade show active" id="nav-body-output" role="tabpanel" aria-labelledby="nav-body-output-tab">
+            <h6>
+                @Html.DisplayText("ResponseContentType")
+            </h6>
+            <pre class="prettyprint pb-3">@Html.DisplayText("ResponseBody")
+        </pre>
+            <button class="btn btn-secondary" onclick="PR.prettyPrint()">Prettify</button>
+        </div>
+        <div class="tab-pane fade" id="nav-headers-output" role="tabpanel" aria-labelledby="nav-headers-output-tab">
+            @if (Model.ResponseHeaders != null)
+            {
+                foreach (var header in Model.ResponseHeaders)
+                {
+                    @:<div class="row"><div class="col-sm-4">@header.Key</div><div class="col-sm-8">@header.Value</div></div><hr />
+                }
+            }
+        </div>
+    </div>
+}
+
