@@ -16,11 +16,8 @@ using webHttpTest.Models;
 
 namespace webHttpTest.Controllers
 {
-
-
     public class HomeController : Controller
     {
-
         public IActionResult Index()
         {
             var model = new HttpRequestViewModel();
@@ -29,6 +26,11 @@ namespace webHttpTest.Controllers
             model.RequestContentType = "application/json";
 
             return View(model);
+        }
+
+        public IActionResult About()
+        {
+            return View();
         }
 
         public async Task<IActionResult> SendRequest(HttpRequestViewModel viewModel)
@@ -94,26 +96,19 @@ namespace webHttpTest.Controllers
                     stopwatch.Start();
 
                     var result = await httpClient.SendAsync(httpRequest);
-                    viewModel.ResponseBody = await result.Content.ReadAsStringAsync();
+
+                    var response = await result.Content.ReadAsStringAsync();
 
                     stopwatch.Stop();
+
+                    // Response properties
+                    viewModel.ResponseBody = PrettyPrint(response);
 
                     viewModel.ResponseCode = (int)result.StatusCode;
                     viewModel.ResponseCodeText = result.StatusCode.ToString();
                     viewModel.ResponseBodyLength = result.Content.Headers.ContentLength.Value;
                     viewModel.ResponseContentType = result.Content.Headers.ContentType.ToString();
                     viewModel.ResponseTimeMilliseconds = stopwatch.ElapsedMilliseconds;
-
-                    //if (viewModel.ResponseContentType.ToLower().Contains("json"))
-                    //{
-                    //    viewModel.ResponseBody = FormatJson(viewModel.ResponseBody);
-                    //}
-
-                    viewModel.ResponseBody = PrettyPrint(viewModel.ResponseBody);
-
-
-                   viewModel.ResponseBody = Regex.Replace(viewModel.ResponseBody, $"({Environment.NewLine})+", $"{Environment.NewLine}")
-                        .Trim();
 
                     // Headers 
 
@@ -152,9 +147,13 @@ namespace webHttpTest.Controllers
                 return input;
             }
 
+            input = Regex.Replace(input, $"({Environment.NewLine})+", $"{Environment.NewLine}")
+                        .Trim();
+
             try
             {
                 return XDocument.Parse(input).ToString();
+
             }
             catch (Exception) { }
 

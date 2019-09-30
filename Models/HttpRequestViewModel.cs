@@ -16,6 +16,7 @@ namespace webHttpTest.Models
         [Url]
         public string Url { get; set; }
 
+        [Display(Name = "Content Type")]
         public string RequestContentType { get; set; }
 
         public string RequestHeaders { get; set; }
