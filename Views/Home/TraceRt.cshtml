@@ -1,0 +1,34 @@
+﻿@model webHttpTest.Models.TraceRtViewModel
+
+@{
+    ViewData["Title"] = "TraceRt";
+}
+
+<h1 class="pb-3">Input</h1>
+<form method="post">
+    <div>
+        <div class="form-group row">
+            <label class="col-sm-3" asp-for="DestinationHost"></label>
+            <input class="form-control col-sm-11" asp-for="DestinationHost" />
+        </div>
+    </div>
+    <button class="btn btn-primary" asp-controller="Home" asp-action="TraceRt">Send</button>
+</form>
+<hr />
+<h1 class="pb-3">Output</h1>
+@if (!string.IsNullOrEmpty(Model.ErrorText))
+{
+    <div class="row alert alert-danger pb-3" role="alert">
+        @Html.DisplayText("ErrorText")
+    </div>
+}
+
+@if (Model.Results != null)
+{
+    foreach (var result in Model.Results)
+    {
+        @:<div class="row"><div class="col-sm-4">@result</div></div>
+        <hr />
+    }
+}
+

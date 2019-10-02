@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -31,6 +33,45 @@ namespace webHttpTest.Controllers
         public IActionResult About()
         {
             return View();
+        }
+
+        public IActionResult TraceRt(TraceRtViewModel viewModel)
+        {
+            viewModel.Results = new List<string>();
+
+            if (string.IsNullOrEmpty(viewModel.DestinationHost))
+            {
+                return View("TraceRt", viewModel);
+            }
+
+            var i = 0;
+
+            foreach (var ip in GetTraceRoute(viewModel.DestinationHost))
+            {
+
+                i++;
+
+                if (ip == null)
+                {
+                    viewModel.Results.Add($"{i}. *");
+                    continue;
+                }
+
+                var hostString = string.Empty;
+
+                try
+                {
+                    var host = Dns.GetHostEntry(ip);
+                    hostString = $" ({host.HostName})";
+                }
+                catch (Exception) { }
+
+                viewModel.Results.Add($"{i}. {ip}{hostString}");
+
+            }
+
+            return View("TraceRt", viewModel);
+
         }
 
         public async Task<IActionResult> SendRequest(HttpRequestViewModel viewModel)
@@ -165,6 +206,45 @@ namespace webHttpTest.Controllers
             catch (Exception) { }
 
             return input;
+        }
+
+        public static IEnumerable<IPAddress> GetTraceRoute(string hostname)
+        {
+            // following are the defaults for the "traceroute" command in unix.
+            const int timeout = 10000;
+            const int maxTTL = 30;
+            const int bufferSize = 32;
+
+            byte[] buffer = new byte[bufferSize];
+            new Random().NextBytes(buffer);
+            Ping pinger = new Ping();
+
+            for (int ttl = 1; ttl <= maxTTL; ttl++)
+            {
+                PingOptions options = new PingOptions(ttl, true);
+                PingReply reply = pinger.Send(hostname, timeout, buffer, options);
+
+                if (reply.Status == IPStatus.TtlExpired)
+                {
+                    // TtlExpired means we've found an address, but there are more addresses
+                    yield return reply.Address;
+                    continue;
+                }
+                if (reply.Status == IPStatus.TimedOut)
+                {
+                    // TimedOut means this ttl is no good, we should continue searching
+                    yield return null;
+                    continue;
+                }
+                if (reply.Status == IPStatus.Success)
+                {
+                    // Success means the tracert has completed
+                    yield return reply.Address;
+                }
+
+                // if we ever reach here, we're finished, so break
+                break;
+            }
         }
     }
 }
