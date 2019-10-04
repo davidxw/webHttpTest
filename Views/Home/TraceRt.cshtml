@@ -8,8 +8,8 @@
 <form method="post">
     <div>
         <div class="form-group row">
-            <label class="col-sm-3" asp-for="DestinationHost"></label>
-            <input class="form-control col-sm-11" asp-for="DestinationHost" />
+            <label class="col-sm-2" asp-for="DestinationHost"></label>
+            <input class="form-control col-sm-5" asp-for="DestinationHost" />
         </div>
     </div>
     <button class="btn btn-primary" asp-controller="Home" asp-action="TraceRt">Send</button>
@@ -23,12 +23,14 @@
     </div>
 }
 
+<code class="text-primary">
 @if (Model.Results != null)
 {
     foreach (var result in Model.Results)
     {
-        @:<div class="row"><div class="col-sm-4">@result</div></div>
-        <hr />
+        @:<div class="row"><div class="col-sm-12">@result</div></div>
     }
 }
+</code>
+
 

@@ -44,16 +44,22 @@ namespace webHttpTest.Controllers
                 return View("TraceRt", viewModel);
             }
 
+            try
+            {
+            var hostName = viewModel.DestinationHost;
+
             var i = 0;
 
-            foreach (var ip in GetTraceRoute(viewModel.DestinationHost))
+            var routes = GetTraceRoute(hostName);
+
+            foreach (var ip in routes)
             {
 
                 i++;
 
                 if (ip == null)
                 {
-                    viewModel.Results.Add($"{i}. *");
+                    viewModel.Results.Add($"{i}. Request timed out");
                     continue;
                 }
 
@@ -62,12 +68,29 @@ namespace webHttpTest.Controllers
                 try
                 {
                     var host = Dns.GetHostEntry(ip);
-                    hostString = $" ({host.HostName})";
+                    hostString = host.HostName;
                 }
                 catch (Exception) { }
 
-                viewModel.Results.Add($"{i}. {ip}{hostString}");
+                if (string.IsNullOrEmpty(hostString))
+                {
+                    viewModel.Results.Add($"{i}. {ip}");
+                }
+                else
+                {
+                    viewModel.Results.Add($"{i}. {hostString} [{ip}]");
+                }
 
+            }
+            }
+            catch (Exception ex)
+            {
+                viewModel.ErrorText = ex.Message;
+
+                if (ex.InnerException != null && ex.Message != ex.InnerException.Message)
+                {
+                    viewModel.ErrorText += $"{Environment.NewLine}{ex.InnerException.Message}";
+                }
             }
 
             return View("TraceRt", viewModel);
@@ -164,6 +187,11 @@ namespace webHttpTest.Controllers
             catch (Exception ex)
             {
                 viewModel.ErrorText = ex.Message;
+
+                if (ex.InnerException != null && ex.Message != ex.InnerException.Message)
+                {
+                    viewModel.ErrorText += $"{Environment.NewLine}{ex.InnerException.Message}";
+                }
             }
 
             return View("Index", viewModel);
@@ -208,7 +236,7 @@ namespace webHttpTest.Controllers
             return input;
         }
 
-        public static IEnumerable<IPAddress> GetTraceRoute(string hostname)
+        public static List<IPAddress> GetTraceRoute(string hostname)
         {
             // following are the defaults for the "traceroute" command in unix.
             const int timeout = 10000;
@@ -219,6 +247,8 @@ namespace webHttpTest.Controllers
             new Random().NextBytes(buffer);
             Ping pinger = new Ping();
 
+            var ipList = new List<IPAddress>();
+
             for (int ttl = 1; ttl <= maxTTL; ttl++)
             {
                 PingOptions options = new PingOptions(ttl, true);
@@ -227,24 +257,26 @@ namespace webHttpTest.Controllers
                 if (reply.Status == IPStatus.TtlExpired)
                 {
                     // TtlExpired means we've found an address, but there are more addresses
-                    yield return reply.Address;
+                    ipList.Add(reply.Address);
                     continue;
                 }
                 if (reply.Status == IPStatus.TimedOut)
                 {
                     // TimedOut means this ttl is no good, we should continue searching
-                    yield return null;
+                    ipList.Add(null);
                     continue;
                 }
                 if (reply.Status == IPStatus.Success)
                 {
                     // Success means the tracert has completed
-                    yield return reply.Address;
+                    ipList.Add(reply.Address);
                 }
 
                 // if we ever reach here, we're finished, so break
                 break;
             }
+
+            return ipList;
         }
     }
 }
