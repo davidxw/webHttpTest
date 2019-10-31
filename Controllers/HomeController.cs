@@ -46,42 +46,48 @@ namespace webHttpTest.Controllers
 
             try
             {
-            var hostName = viewModel.DestinationHost;
+                var hostName = viewModel.DestinationHost;
 
-            var i = 0;
+                var i = 0;
 
-            var routes = GetTraceRoute(hostName);
+                var routes = GetTraceRoute(hostName);
 
-            foreach (var ip in routes)
-            {
-
-                i++;
-
-                if (ip == null)
+                foreach (var ip in routes)
                 {
-                    viewModel.Results.Add($"{i}. Request timed out");
-                    continue;
-                }
 
-                var hostString = string.Empty;
+                    i++;
 
-                try
-                {
-                    var host = Dns.GetHostEntry(ip);
-                    hostString = host.HostName;
-                }
-                catch (Exception) { }
+                    if (ip == null)
+                    {
+                        viewModel.Results.Add($"{i}. Request timed out");
+                        continue;
+                    }
 
-                if (string.IsNullOrEmpty(hostString))
-                {
-                    viewModel.Results.Add($"{i}. {ip}");
-                }
-                else
-                {
-                    viewModel.Results.Add($"{i}. {hostString} [{ip}]");
-                }
+                    var hostString = string.Empty;
 
-            }
+                    try
+                    {
+                        var host = Dns.GetHostEntry(ip);
+                        hostString = host.HostName;
+                    }
+                    catch (Exception) { }
+
+                    var resultString = string.Empty;
+
+                    if (string.IsNullOrEmpty(hostString))
+                    {
+                        resultString = $"{i}. {ip}";
+                    }
+                    else
+                    {
+                        resultString = $"{i}. {hostString} [{ip}]";
+                    }
+
+                    Debug.WriteLine(resultString);
+                    
+                    viewModel.Results.Add(resultString);
+
+                }
             }
             catch (Exception ex)
             {
@@ -236,7 +242,8 @@ namespace webHttpTest.Controllers
             return input;
         }
 
-        public static List<IPAddress> GetTraceRoute(string hostname)
+        // https://stackoverflow.com/a/45565253
+        public static IEnumerable<IPAddress> GetTraceRoute(string hostname)
         {
             // following are the defaults for the "traceroute" command in unix.
             const int timeout = 10000;
@@ -247,8 +254,6 @@ namespace webHttpTest.Controllers
             new Random().NextBytes(buffer);
             Ping pinger = new Ping();
 
-            var ipList = new List<IPAddress>();
-
             for (int ttl = 1; ttl <= maxTTL; ttl++)
             {
                 PingOptions options = new PingOptions(ttl, true);
@@ -257,26 +262,23 @@ namespace webHttpTest.Controllers
                 if (reply.Status == IPStatus.TtlExpired)
                 {
                     // TtlExpired means we've found an address, but there are more addresses
-                    ipList.Add(reply.Address);
+                    yield return reply.Address;
                     continue;
                 }
                 if (reply.Status == IPStatus.TimedOut)
                 {
                     // TimedOut means this ttl is no good, we should continue searching
-                    ipList.Add(null);
                     continue;
                 }
                 if (reply.Status == IPStatus.Success)
                 {
                     // Success means the tracert has completed
-                    ipList.Add(reply.Address);
+                    yield return reply.Address;
                 }
 
                 // if we ever reach here, we're finished, so break
                 break;
             }
-
-            return ipList;
         }
     }
 }
