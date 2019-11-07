@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using webHttpTest.Hubs;
+
 
 namespace webHttpTest
 {
@@ -31,7 +33,7 @@ namespace webHttpTest
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -58,6 +60,12 @@ namespace webHttpTest
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapHub<TraceRtHub>("/traceRtHub");
             });
         }
     }

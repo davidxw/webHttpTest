@@ -4,7 +4,7 @@
 
 @model HttpRequestViewModel
 
-<h1 class="pb-3">Input</h1>
+<h1 class="pb-3">Request</h1>
 <form method="post">
     <div>
         <div class="form-group row">
@@ -48,7 +48,7 @@
 </form>
 
 <hr />
-<h1 class="pb-3">Output</h1>
+<h1 class="pb-3">Response</h1>
 @if (!string.IsNullOrEmpty(Model.ErrorText))
 {
     <div class="row alert alert-danger pb-3" role="alert">
