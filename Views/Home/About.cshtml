@@ -1,4 +1,17 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<a href="https://jsonplaceholder.typicode.com/">Sample REST API</a>
+<p><strong>Machine Name:</strong> @ViewData["MachineName"] </p>
+<p><strong>Host Name:</strong> @ViewData["HostName"] </p>
+<p><strong>IP4 Addresses:</strong></p>
+<hr/>
+
+<div>
+    @{
+    var ipAddresses = (List<string>)ViewData["IpAddresses"];
+    foreach (var ip in ipAddresses)
+    {
+    <div class="row"><div class="col-sm-4">@ip</div></div><hr />
+    }
+    }
+</div>

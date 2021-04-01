@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -30,6 +31,12 @@ namespace webHttpTest.Controllers
 
         public IActionResult About()
         {
+            string hostName1 = System.Environment.MachineName;
+            
+            ViewData.Add("MachineName", System.Environment.MachineName);
+            ViewData.Add("HostName", System.Net.Dns.GetHostName());
+            ViewData.Add("IpAddresses", GetAllLocalIPv4());
+
             return View();
         }
 
@@ -190,11 +197,11 @@ namespace webHttpTest.Controllers
             }
             catch (Exception ex)
             {
-                viewModel.ErrorText = ex.Message;
+                viewModel.ErrorText = ex.ToString();
 
                 if (ex.InnerException != null && ex.Message != ex.InnerException.Message)
                 {
-                    viewModel.ErrorText += $"{Environment.NewLine}{ex.InnerException.Message}";
+                    viewModel.ErrorText += $"{Environment.NewLine}{ex.InnerException}";
                 }
             }
 
@@ -277,6 +284,27 @@ namespace webHttpTest.Controllers
                 // if we ever reach here, we're finished, so break
                 break;
             }
+        }
+
+        private List<string> GetAllLocalIPv4()
+        {
+            // https://stackoverflow.com/questions/6803073/get-local-ip-address
+
+            List<string> ipAddrList = new List<string>();
+            foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (item.OperationalStatus == OperationalStatus.Up)
+                {
+                    foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses)
+                    {
+                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            ipAddrList.Add($"{ip.Address} ({item.NetworkInterfaceType})");
+                        }
+                    }
+                }
+            }
+            return ipAddrList;
         }
     }
 }
