@@ -1,17 +1,29 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<p><strong>Machine Name:</strong> @ViewData["MachineName"] </p>
-<p><strong>Host Name:</strong> @ViewData["HostName"] </p>
+
+<div class="row"><div class="col-sm-4"><strong>Machine Name:</strong></div><div class="col-sm-4"> @ViewData["MachineName"]</div></div><hr />
+<div class="row"><div class="col-sm-4"><strong>Host Name:</strong></div><div class="col-sm-4"> @ViewData["HostName"]</div></div><hr />
+
 <p><strong>IP4 Addresses:</strong></p>
 <hr/>
-
 <div>
     @{
     var ipAddresses = (List<string>)ViewData["IpAddresses"];
     foreach (var ip in ipAddresses)
     {
-    <div class="row"><div class="col-sm-4">@ip</div></div><hr />
+        <div class="row"><div class="col-sm-4">@ip</div></div><hr />
+    }
+    }
+</div>
+<p><strong>Environment Variables:</strong></p>
+<hr/>
+<div>
+    @{
+    var environemtnVariables = (Dictionary<string,string>)ViewData["EnvironmentVariables"];
+    foreach (var env in environemtnVariables)
+    {
+        <div class="row"><div class="col-sm-4">@env.Key</div><div class="col-sm-4">@env.Value</div></div><hr />
     }
     }
 </div>

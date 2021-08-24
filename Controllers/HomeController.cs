@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -32,10 +33,11 @@ namespace webHttpTest.Controllers
         public IActionResult About()
         {
             string hostName1 = System.Environment.MachineName;
-            
+
             ViewData.Add("MachineName", System.Environment.MachineName);
             ViewData.Add("HostName", System.Net.Dns.GetHostName());
             ViewData.Add("IpAddresses", GetAllLocalIPv4());
+            ViewData.Add("EnvironmentVariables", GetEnvironmentVariables());
 
             return View();
         }
@@ -89,7 +91,7 @@ namespace webHttpTest.Controllers
                     }
 
                     Debug.WriteLine(resultString);
-                    
+
                     viewModel.Results.Add(resultString);
 
                 }
@@ -182,7 +184,7 @@ namespace webHttpTest.Controllers
                     viewModel.ResponseCode = (int)result.StatusCode;
                     viewModel.ResponseCodeText = result.StatusCode.ToString();
                     viewModel.ResponseBodyLength = result.Content.Headers.ContentLength.Value;
-                    viewModel.ResponseContentType = result.Content.Headers.ContentType.ToString();
+                    viewModel.ResponseContentType = result.Content.Headers.ContentType == null ? "Unkown" : result.Content.Headers.ContentType.ToString();
                     viewModel.ResponseTimeMilliseconds = stopwatch.ElapsedMilliseconds;
 
                     // Headers 
@@ -306,5 +308,18 @@ namespace webHttpTest.Controllers
             }
             return ipAddrList;
         }
+
+        private Dictionary<string, string> GetEnvironmentVariables()
+        {
+            var envVariables = new Dictionary<string, string>();
+
+            foreach (DictionaryEntry item in Environment.GetEnvironmentVariables())
+            {
+                envVariables.Add((string)item.Key, (string)item.Value);
+            }
+
+            return envVariables;
+        }
+
     }
 }
