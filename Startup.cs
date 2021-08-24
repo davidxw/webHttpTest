@@ -9,8 +9,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.ProjectModel;
 using webHttpTest.Hubs;
-
+using webHttpTest.Services;
 
 namespace webHttpTest
 {
@@ -35,7 +36,8 @@ namespace webHttpTest
 
             services.AddSignalR();
             services.AddMvc(options => options.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            
+
+            services.AddScoped<INetworkService, NetworkService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

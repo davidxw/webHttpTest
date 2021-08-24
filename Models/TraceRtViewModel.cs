@@ -24,7 +24,7 @@ namespace webHttpTest.Models
         public int et1 { get; set; }
         public int et2 { get; set; }
         public int et3 { get; set; }
-        public IPAddress iPAddress { get; set; }
+        public string iPAddress { get; set; }
         public string hostName { get; set; }
 
         public PingResult()

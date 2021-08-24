@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "TraceRtDirect";
+}
+
+<h1 class="pb-3">Request</h1>
+
+<div>
+    <div class="form-group row">
+        <label class="col-sm-2"></label>
+        <input id="host" />
+    </div>
+</div>
+<button id="startTrace" class="btn btn-primary">Send</button>
+
+<hr />
+<h1 class="pb-3">Response</h1>
+
+<div id="results">
+</div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/traceRt.js"></script>
+
+
