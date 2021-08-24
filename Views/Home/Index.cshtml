@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" asp-controller="Home" asp-action="SendRequest">Send</button>
+    <input class="btn btn-primary" type="submit" asp-controller="Home" asp-action="SendRequest"></input>
 </form>
 
 <hr />
@@ -108,5 +108,17 @@
             }
         </div>
     </div>
+}
+
+
+@section Scripts
+{
+<script>
+$(function(){
+  $('input').on('click', function(){
+    $(this).toggleClass('animate');
+  })
+});
+</script>
 }
 

@@ -9,10 +9,10 @@
     <div>
         <div class="form-group row">
             <label class="col-sm-2" asp-for="DestinationHost"></label>
-            <input class="form-control col-sm-5" asp-for="DestinationHost" />
+            <input class="form-control col-sm-5" id="host" asp-for="DestinationHost" />
         </div>
     </div>
-    <button class="btn btn-primary" asp-controller="Home" asp-action="TraceRt">Send</button>
+    <input class="btn btn-primary" type="submit" asp-controller="Home" asp-action="TraceRt"></input>
 </form>
 <hr />
 <h1 class="pb-3">Response</h1>
@@ -38,5 +38,16 @@
        }
 }
 </div>
+
+@section Scripts
+{
+<script>
+$(function(){
+  $('input').on('click', function(){
+    $(this).toggleClass('animate');
+  })
+});
+</script>
+}
 
 

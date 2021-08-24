@@ -1,9 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
-"use strict";
+﻿"use strict";
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/traceRtHub").build();
 
@@ -23,8 +18,6 @@ connection.on("Notify", function (message) {
     $div.append("<code class='col-sm-8'>" + pingResult.FormattedHostName + "</code>");
 
     $("#results").append($div);
-
-    
 });
 
 connection.start().then(function () {
