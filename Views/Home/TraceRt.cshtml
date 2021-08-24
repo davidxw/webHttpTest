@@ -23,14 +23,18 @@
     </div>
 }
 
-<code class="text-primary">
+<div>
 @if (Model.Results != null)
 {
     foreach (var result in Model.Results)
     {
-        @:<div class="row"><div class="col-sm-12">@result</div></div>
+        @:<div class="row">
+        @:    <div class="col-sm-1">@result.hop</div>
+        @:    <div class="col-sm-1">@result.FormattedEt1</div>
+        @:    <div class="col-sm-10">@result.FormattedHostName</div>
+        @:</div>
     }
 }
-</code>
+</div>>
 
 
