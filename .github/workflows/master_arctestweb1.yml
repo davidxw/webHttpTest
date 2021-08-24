@@ -40,7 +40,8 @@ jobs:
         push: true
         labels: ${{ steps.meta.outputs.labels }}
         tags:  |
-          davidxw/webtest:latest
+          davidxw/webtest:latest,
+          davidxw/webtest:${{ github.run_number }}
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
