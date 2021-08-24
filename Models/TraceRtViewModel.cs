@@ -50,13 +50,32 @@ namespace webHttpTest.Models
         {
             get
             {
-                {
-                    if (iPAddress == null)
-                        return "*";
-                    else
-                        return $"{et1} ms";
-                }
+                return GetFormattedEt(et1);
             }
+        }
+
+        public string FormattedEt2
+        {
+            get
+            {
+                return GetFormattedEt(et2);
+            }
+        }
+
+        public string FormattedEt3
+        {
+            get
+            {
+                return GetFormattedEt(et3);
+            }
+        }
+
+        public string GetFormattedEt(int et)
+        {
+            if (iPAddress == null)
+                return "*";
+            else
+                return string.Format("{0,3:###} ms", et);
         }
     }
 }

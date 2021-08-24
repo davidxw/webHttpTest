@@ -57,7 +57,7 @@ namespace webHttpTest.Controllers
 
                 var routes = GetTraceRoute(hostName);
 
-                int i = 0;
+                int i = 1;
 
                 foreach (var pingResult in routes)
                 {
@@ -238,25 +238,37 @@ namespace webHttpTest.Controllers
 
                 pingResult.et1 = st.Elapsed.Milliseconds;
 
-                if (reply1.Status == IPStatus.TtlExpired)
+                st.Restart();
+                PingReply reply2 = pinger.Send(hostname, timeout, buffer, options);
+                st.Stop();
+
+                pingResult.et2 = st.Elapsed.Milliseconds;
+
+                st.Restart();
+                PingReply reply3 = pinger.Send(hostname, timeout, buffer, options);
+                st.Stop();
+
+                pingResult.et3 = st.Elapsed.Milliseconds;
+
+                if (reply1.Status == IPStatus.TtlExpired || reply2.Status == IPStatus.TtlExpired || reply3.Status == IPStatus.TtlExpired)
                 {
                     // TtlExpired means we've found an address, but there are more addresses
-                    pingResult.iPAddress = reply1.Address;
+                    pingResult.iPAddress = reply1.Status == IPStatus.TtlExpired ? reply1.Address : reply2.Status == IPStatus.TtlExpired ? reply2.Address : reply3.Address;
                     pingResult.hostName = GetHostNameFromIp(pingResult.iPAddress);
 
                     yield return pingResult;
                     continue;
                 }
-                if (reply1.Status == IPStatus.TimedOut)
+                if (reply1.Status == IPStatus.TimedOut && reply2.Status == IPStatus.TimedOut && reply3.Status == IPStatus.TimedOut)
                 {
                     // TimedOut means this ttl is no good, we should continue searching
                     yield return pingResult;
                     continue;
                 }
-                if (reply1.Status == IPStatus.Success)
+                if (reply1.Status == IPStatus.Success || reply2.Status == IPStatus.Success || reply3.Status == IPStatus.Success)
                 {
                     // Success means the tracert has completed
-                    pingResult.iPAddress = reply1.Address;
+                    pingResult.iPAddress = reply1.Status == IPStatus.Success ? reply1.Address : reply2.Status == IPStatus.Success ? reply2.Address : reply3.Address;
                     pingResult.hostName = GetHostNameFromIp(pingResult.iPAddress);
                 }
 

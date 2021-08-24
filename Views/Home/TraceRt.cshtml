@@ -29,12 +29,14 @@
     foreach (var result in Model.Results)
     {
         @:<div class="row">
-        @:    <div class="col-sm-1">@result.hop</div>
-        @:    <div class="col-sm-1">@result.FormattedEt1</div>
-        @:    <div class="col-sm-10">@result.FormattedHostName</div>
+        @:    <code class="col-sm-1">@result.hop</code>
+        @:    <code class="col-sm-1">@result.FormattedEt1</code>
+        @:    <code class="col-sm-1">@result.FormattedEt2</code>
+        @:    <code class="col-sm-1">@result.FormattedEt3</code>
+        @:    <code class="col-sm-8">@result.FormattedHostName</code>
         @:</div>
-    }
+       }
 }
-</div>>
+</div>
 
 
