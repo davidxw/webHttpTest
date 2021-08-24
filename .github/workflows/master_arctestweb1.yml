@@ -33,24 +33,4 @@ jobs:
         name: .net-app
         path: ${{env.DOTNET_ROOT}}/myapp
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v2
-      with:
-        name: .net-app
-
-    - name: Deploy to Azure Web App
-      id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'arctestweb1'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_da7f9410970347ecbdc1310b2331be09 }}
-        package: .
+  
