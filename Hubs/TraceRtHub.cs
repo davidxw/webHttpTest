@@ -27,6 +27,11 @@ namespace webHttpTest.Hubs
                 return;
             }
 
+            // message types:
+            //  hop - trace hop details
+            //  end - no more messages expected
+            //  error - error message to display
+
             try
             {
                 var routes = _networkService.GetTraceRoute(hostName);
@@ -38,12 +43,22 @@ namespace webHttpTest.Hubs
                     pingResult.hop = i++;
 
                     var pingResultJson = JsonConvert.SerializeObject(pingResult);
-                    await _hubContext.Clients.All.SendAsync("Notify", pingResultJson);
+                    await _hubContext.Clients.All.SendAsync("Notify", "hop", pingResultJson);
                 }
+
+                await _hubContext.Clients.All.SendAsync("Notify", "end");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                var errorMessage = ex.Message;
+
+                if (ex.InnerException != null && ex.Message != ex.InnerException.Message)
+                {
+                    errorMessage += $"{Environment.NewLine}{ex.InnerException.Message}";
+                }
+
+
+                await _hubContext.Clients.All.SendAsync("Notify", "error", $"{errorMessage}");
             }
         }
     }

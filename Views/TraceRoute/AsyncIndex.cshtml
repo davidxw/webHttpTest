@@ -10,12 +10,16 @@
         <input class="form-control col-sm-5" id="host" />
     </div>
 </div>
-<button id="startTrace" class="btn btn-primary">Send</button>
+<input type="submit" id="startTrace" class="btn btn-primary" />
 
 <hr />
 <h1 class="pb-3">Response</h1>
 
 <div id="results">
+</div>
+
+<br>
+<div class="row alert alert-danger pb-3" style="display:none" role="alert" id="error">
 </div>
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
