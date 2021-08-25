@@ -42,60 +42,6 @@ namespace webHttpTest.Controllers
             return View(model);
         }
 
-        public IActionResult About()
-        {
-            string hostName1 = System.Environment.MachineName;
-
-            ViewData.Add("MachineName", System.Environment.MachineName);
-            ViewData.Add("HostName", System.Net.Dns.GetHostName());
-            ViewData.Add("IpAddresses", _networkService.GetAllLocalIPv4());
-            ViewData.Add("EnvironmentVariables", GetEnvironmentVariables());
-
-            return View();
-        }
-
-        public IActionResult TraceRtDirect()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> TraceRt(TraceRtViewModel viewModel)
-        {
-            viewModel.Results = new List<PingResult>();
-
-            if (string.IsNullOrEmpty(viewModel.DestinationHost))
-            {
-                return View("TraceRt", viewModel);
-            }
-
-            try
-            {
-                var hostName = viewModel.DestinationHost;
-
-                var routes = _networkService.GetTraceRoute(hostName);
-
-                int i = 1;
-
-                foreach (var pingResult in routes)
-                {
-                    pingResult.hop = i++;
-                    viewModel.Results.Add(pingResult);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                viewModel.ErrorText = ex.Message;
-
-                if (ex.InnerException != null && ex.Message != ex.InnerException.Message)
-                {
-                    viewModel.ErrorText += $"{Environment.NewLine}{ex.InnerException.Message}";
-                }
-            }
-
-            return View("TraceRt", viewModel);
-        }
-
         public async Task<IActionResult> SendRequest(HttpRequestViewModel viewModel)
         {
             try
@@ -237,17 +183,7 @@ namespace webHttpTest.Controllers
 
         // https://stackoverflow.com/a/45565253
 
-        private Dictionary<string, string> GetEnvironmentVariables()
-        {
-            var envVariables = new Dictionary<string, string>();
 
-            foreach (DictionaryEntry item in Environment.GetEnvironmentVariables())
-            {
-                envVariables.Add((string)item.Key, (string)item.Value);
-            }
-
-            return envVariables;
-        }
 
     }
 }

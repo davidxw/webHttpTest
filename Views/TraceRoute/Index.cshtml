@@ -1,7 +1,7 @@
 ﻿@model webHttpTest.Models.TraceRtViewModel
 
 @{
-    ViewData["Title"] = "TraceRt";
+    ViewData["Title"] = "Trace Route";
 }
 
 <h1 class="pb-3">Request</h1>
@@ -12,10 +12,11 @@
             <input class="form-control col-sm-5" id="host" asp-for="DestinationHost" />
         </div>
     </div>
-    <input class="btn btn-primary" type="submit" asp-controller="Home" asp-action="TraceRt"></input>
+    <input class="btn btn-primary" type="submit" asp-controller="TraceRoute" asp-action="Index" id="submit"></input>
 </form>
 <hr />
 <h1 class="pb-3">Response</h1>
+
 @if (!string.IsNullOrEmpty(Model.ErrorText))
 {
     <div class="row alert alert-danger pb-3" role="alert">
@@ -43,7 +44,7 @@
 {
 <script>
 $(function(){
-  $('input').on('click', function(){
+  $('#submit').on('click', function(){
     $(this).toggleClass('animate');
   })
 });
