@@ -49,7 +49,7 @@ namespace webHttpTest.Controllers
 
                 if (ex.InnerException != null && ex.Message != ex.InnerException.Message)
                 {
-                    viewModel.ErrorText += $"{Environment.NewLine}{ex.InnerException.Message}";
+                    viewModel.ErrorText += $"{System.Environment.NewLine}{ex.InnerException.Message}";
                 }
             }
 

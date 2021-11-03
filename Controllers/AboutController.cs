@@ -6,32 +6,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using webHttpTest.Hubs;
+using webHttpTest.Models;
 using webHttpTest.Services;
 
 namespace webHttpTest.Controllers
 {
     public class AboutController : Controller
     {
-        private INetworkService _networkService;
+        private IHostingEnvironmentService _hostingEnvironmentService;
 
-        public AboutController(INetworkService networkService)
+        public AboutController(IHostingEnvironmentService hostingEnvironmentService)
         {
-            _networkService = networkService;
+            _hostingEnvironmentService = hostingEnvironmentService;
         }
 
         public IActionResult Index()
         {
-            string hostName1 = System.Environment.MachineName;
+            var environment = _hostingEnvironmentService.GetHostingEnvironment();
 
-            ViewData.Add("MachineName", System.Environment.MachineName);
-            ViewData.Add("HostName", System.Net.Dns.GetHostName());
-            ViewData.Add("IpAddresses", _networkService.GetAllLocalIPv4());
-            ViewData.Add("EnvironmentVariables", GetEnvironmentVariables());
-
-            return View();
+            return View(environment);
         }
 
-        private Dictionary<string, string> GetEnvironmentVariables()
+        private static Dictionary<string, string> GetEnvironmentVariables()
         {
             var envVariables = new Dictionary<string, string>();
 

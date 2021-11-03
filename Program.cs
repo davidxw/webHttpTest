@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using webHttpTest.Controllers;
 using webHttpTest.Hubs;
 using webHttpTest.Services;
 
@@ -9,7 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
-builder.Services.AddScoped<INetworkService, NetworkService>();
+builder.Services.AddSingleton<INetworkService, NetworkService>();
+builder.Services.AddSingleton<IHostingEnvironmentService, HostingEnvironmentService>();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -39,6 +44,13 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<TraceRtHub>("/traceRtHub");
 });
 
-app.MapGet("/api/hello", () => "Hello World!");
+// quick and dirty api
+app.UseSwagger();
+
+var hostingEnvironmentService = app.Services.GetRequiredService<IHostingEnvironmentService>();
+
+app.MapGet("/api/environment", () => hostingEnvironmentService.PrintHostingEnvironment());
+
+app.UseSwaggerUI();
 
 app.Run();

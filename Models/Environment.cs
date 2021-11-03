@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace webHttpTest.Models
+{
+    public class HostingEnvironment
+    {
+        public string MachineName { get;set;}
+
+        public string HostName { get; set; }
+
+        public List<string> IpAddresses { get; set; }
+
+        public Dictionary<string, string> EnvironmentVariables { get; set; }
+    }
+}
