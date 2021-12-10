@@ -1,6 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using webHttpTest.api;
 using webHttpTest.Hubs;
 using webHttpTest.Services;
 
@@ -43,6 +49,16 @@ app.UseEndpoints(endpoints =>
 
 // quick and dirty api
 
-app.MapGet("/api/environment", () => app.Services.GetRequiredService<IHostingEnvironmentService>().PrintHostingEnvironment());
+app.MapGet("/api/environment", (IHostingEnvironmentService hostingEnvironmentService) =>
+{
+    return hostingEnvironmentService.PrintHostingEnvironment();
+});
+
+app.MapGet("/api/work", (int ? duration, int ? cpu) =>
+{
+    Api.Work(duration, cpu);
+});
 
 app.Run();
+
+
