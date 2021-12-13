@@ -51,6 +51,8 @@ app.UseEndpoints(endpoints =>
 
 app.MapGet("/api/environment", (IHostingEnvironmentService hostingEnvironmentService) =>
 {
+    Console.WriteLine($"{DateTime.Now} - Recieved HostEnvironment request");
+
     return hostingEnvironmentService.PrintHostingEnvironment();
 });
 
