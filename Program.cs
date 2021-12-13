@@ -56,7 +56,7 @@ app.MapGet("/api/environment", (IHostingEnvironmentService hostingEnvironmentSer
 
 app.MapGet("/api/work", (int ? duration, int ? cpu) =>
 {
-    Api.Work(duration, cpu);
+    return Api.Work(duration, cpu);
 });
 
 app.Run();

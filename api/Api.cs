@@ -17,7 +17,7 @@ namespace webHttpTest.api
 
     public class Api
     {
-        public static void Work(int? duration, int? cpu)
+        public static string Work(int? duration, int? cpu)
         {
             cpu = cpu.HasValue ? cpu.Value : 0;
             duration = duration.HasValue ? duration.Value : 0;
@@ -42,6 +42,8 @@ namespace webHttpTest.api
             {
                 t.cts.Cancel();
             }
+
+            return $"Simulated {cpu.Value}% CPU for {duration.Value} milliseconds";
         }
 
         static void CPUKill(object state)
