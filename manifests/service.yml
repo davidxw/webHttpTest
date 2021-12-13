@@ -2,6 +2,8 @@
 kind: Service
 metadata:
     name: webhttptest
+    annotations:
+        service.beta.kubernetes.io/azure-dns-label-name: webhttptest
 spec:
     type: LoadBalancer
     ports:

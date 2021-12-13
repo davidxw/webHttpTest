@@ -56,6 +56,8 @@ app.MapGet("/api/environment", (IHostingEnvironmentService hostingEnvironmentSer
 
 app.MapGet("/api/work", (int ? duration, int ? cpu) =>
 {
+    Console.WriteLine($"{DateTime.Now} - Recieved work request - CPU: {cpu.Value}% CPU, duration: {duration.Value}");
+
     return Api.Work(duration, cpu);
 });
 
