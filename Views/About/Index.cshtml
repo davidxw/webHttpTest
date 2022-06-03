@@ -3,9 +3,12 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<p><strong>APIs</strong></p>
+<p><a href = "/api/environment" target="_blank">/api/environment</a>: Get the data on this page</p>
+<p><a href = "/api/work?cpu=20&duration=5000" target="_blank">/api/work?cpu=XXX&duration=YYYY</a>: Generate load with cpu=%cpu and duration=#milliseconds</p>
+<p><a href = "/api/get?url=https%3A%2F%2Fwww.microsoft.com" target="_blank">/api/get?url=encodedurl</></a>: Http get to encoded url</p>
 
-<p>This data can also be retrieved by calling <a href = "/api/environment" target="_blank">/api/environment</a>
-<p>To generate load call <a href = "/api/work?cpu=20&duration=5000" target="_blank">/api/work?cpu=XXX&duration=YYYY</a> with cpu=%cpu and duration=#milliseconds</p><hr />
+<hr />
 
 <div class="row"><div class="col-sm-4"><strong>Machine Name:</strong></div><div class="col-sm-4"> @Model.MachineName</div></div><hr />
 <div class="row"><div class="col-sm-4"><strong>Host Name:</strong></div><div class="col-sm-4"> @Model.HostName</div></div><hr />

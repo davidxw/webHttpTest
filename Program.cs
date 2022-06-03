@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using webHttpTest.api;
@@ -61,6 +62,26 @@ app.MapGet("/api/work", (int ? duration, int ? cpu) =>
     Console.WriteLine($"{DateTime.Now} - Recieved work request - CPU: {cpu.Value}% CPU, duration: {duration.Value}");
 
     return Api.Work(duration, cpu);
+});
+
+app.MapGet("/api/get", async (string url) =>
+{
+    Console.WriteLine($"{DateTime.Now} - Recieved get request - URL: {url}");
+
+    var httpClient = new HttpClient();
+    var result = string.Empty;
+
+    try
+    {
+        result = await httpClient.GetStringAsync(url);
+    }
+    catch (HttpRequestException httpex)
+    {
+        Console.WriteLine(httpex);
+        result = $"HttpRequestException: {httpex.Message}";
+    }
+
+    return result;
 });
 
 app.Run();
