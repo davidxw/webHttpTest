@@ -30,6 +30,7 @@ namespace webHttpTest.Services
             environment.HostName = System.Net.Dns.GetHostName();
             environment.IpAddresses = _networkService.GetAllLocalIPv4();
             environment.EnvironmentVariables = GetEnvironmentVariables();
+            environment.ProcessorCount = Environment.ProcessorCount;
 
             return environment;
         }

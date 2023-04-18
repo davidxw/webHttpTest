@@ -11,6 +11,10 @@ namespace webHttpTest.Models
 
         public List<string> IpAddresses { get; set; }
 
+        public int ProcessorCount { get; set; }
+
+        public long VirtualMemory {get; set; }
+
         public Dictionary<string, string> EnvironmentVariables { get; set; }
     }
 }
