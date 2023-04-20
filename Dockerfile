@@ -15,6 +15,18 @@ FROM build AS publish
 RUN dotnet publish "webHttpTest.csproj" -c Release -o /app
 
 FROM base AS final
+
+RUN apt update && \
+    apt install --assume-yes \
+    # build/code
+    git bash bash-completion vim tmux jq \
+    # network
+    net-tools tcpdump curl wget nmap tcpflow iftop net-tools mtr netcat-openbsd bridge-utils iperf ngrep \
+    # certificates
+    ca-certificates openssl \
+    # processes/io
+    htop atop strace iotop sysstat ltrace ncdu logrotate hdparm pciutils psmisc tree pv 
+
 WORKDIR /app
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "webHttpTest.dll"]
