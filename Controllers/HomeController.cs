@@ -105,7 +105,7 @@ namespace webHttpTest.Controllers
 
                         if (sslPolicyErrors != SslPolicyErrors.None)
                         {
-                            viewModel.ErrorText = $"Warning - SSL policy rrrors: {sslPolicyErrors}";
+                            viewModel.ErrorText = $"Warning - SSL policy errors: {sslPolicyErrors}";
                         }
 
                         return true;
