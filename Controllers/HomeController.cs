@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -98,7 +99,19 @@ namespace webHttpTest.Controllers
                                         viewModel.RequestContentType);
                     }
 
-                    var httpClient = new HttpClient();
+                    var httpClientHandler = new HttpClientHandler();
+                    httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) =>
+                    {
+
+                        if (sslPolicyErrors != SslPolicyErrors.None)
+                        {
+                            viewModel.ErrorText = $"Warning - SSL policy rrrors: {sslPolicyErrors}";
+                        }
+
+                        return true;
+                    };
+
+                    var httpClient = new HttpClient(httpClientHandler);
 
                     var stopwatch = new Stopwatch();
 

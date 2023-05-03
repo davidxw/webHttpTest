@@ -57,7 +57,7 @@ app.MapGet("/api/environment", (IHostingEnvironmentService hostingEnvironmentSer
     return hostingEnvironmentService.PrintHostingEnvironment();
 });
 
-app.MapGet("/api/work", (int ? duration, int ? cpu) =>
+app.MapGet("/api/work", (int? duration, int? cpu) =>
 {
     Console.WriteLine($"{DateTime.Now} - Recieved work request - CPU: {cpu.Value}% CPU, duration: {duration.Value}");
 
@@ -67,6 +67,12 @@ app.MapGet("/api/work", (int ? duration, int ? cpu) =>
 app.MapGet("/api/get", async (string url) =>
 {
     Console.WriteLine($"{DateTime.Now} - Recieved get request - URL: {url}");
+
+    var httpClientHandler = new HttpClientHandler();
+    httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) =>
+    {
+        return true;
+    };
 
     var httpClient = new HttpClient();
     var result = string.Empty;
