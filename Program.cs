@@ -74,7 +74,7 @@ app.MapGet("/api/get", async (string url) =>
         return true;
     };
 
-    var httpClient = new HttpClient();
+    var httpClient = new HttpClient(httpClientHandler);
     var result = string.Empty;
 
     try
