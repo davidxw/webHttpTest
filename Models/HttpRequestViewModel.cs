@@ -56,6 +56,8 @@ namespace webHttpTest.Models
             new SelectListItem { Value = "text/plain", Text="TEXT (text/plain)" },
             new SelectListItem { Value = "application/x-www.form-urlencoded", Text="FORM URL Encoded (application/x-www.form-urlencoded)" }
         };
+
+        public string PageColour { get; set; }
     }
 
     public class Header

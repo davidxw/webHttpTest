@@ -40,6 +40,8 @@ namespace webHttpTest.Controllers
             model.Method = "GET";
             model.RequestContentType = "application/json";
 
+            model.PageColour = Environment.GetEnvironmentVariable("PAGE_COLOUR");
+
             return View(model);
         }
 
