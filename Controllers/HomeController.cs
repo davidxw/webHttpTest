@@ -154,6 +154,8 @@ namespace webHttpTest.Controllers
                 }
             }
 
+            viewModel.PageColour = Environment.GetEnvironmentVariable("PAGE_COLOUR");
+
             return View("Index", viewModel);
         }
 
