@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace webHttpTest.Models
 {
@@ -16,5 +17,7 @@ namespace webHttpTest.Models
         public long VirtualMemory {get; set; }
 
         public Dictionary<string, string> EnvironmentVariables { get; set; }
+
+        public string AzureIdentity { get; set; }
     }
 }

@@ -26,18 +26,6 @@ namespace webHttpTest.Controllers
 
             return View(environment);
         }
-
-        private static Dictionary<string, string> GetEnvironmentVariables()
-        {
-            var envVariables = new Dictionary<string, string>();
-
-            foreach (DictionaryEntry item in Environment.GetEnvironmentVariables())
-            {
-                envVariables.Add((string)item.Key, (string)item.Value);
-            }
-
-            return envVariables;
-        }
     }
 
 

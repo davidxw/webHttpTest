@@ -1,37 +1,50 @@
-﻿@model webHttpTest.Models.HostingEnvironment
+﻿@using Newtonsoft.Json
+@model webHttpTest.Models.HostingEnvironment
 
 @{
     ViewData["Title"] = "Home Page";
 }
 <p><strong>APIs</strong></p>
-<p><a href = "/api/environment" target="_blank">/api/environment</a>: Get the data on this page</p>
-<p><a href = "/api/work?cpu=20&duration=5000" target="_blank">/api/work?cpu=XXX&duration=YYYY</a>: Generate load with cpu=%cpu and duration=#milliseconds</p>
-<p><a href = "/api/get?url=https%3A%2F%2Fwww.microsoft.com" target="_blank">/api/get?url=encodedurl</></a>: Http get to encoded url</p>
+<p><a href="/api/environment" target="_blank">/api/environment</a>: Get the data on this page</p>
+<p><a href="/api/work?cpu=20&duration=5000" target="_blank">/api/work?cpu=XXX&duration=YYYY</a>: Generate load with cpu=%cpu and duration=#milliseconds</p>
+<p><a href="/api/get?url=https%3A%2F%2Fwww.microsoft.com" target="_blank">/api/get?url=encodedurl</></a>: Http get to encoded url</p>
 <p>Set environment variable PAGE_COLOUR to change background colour of home page</p>
 
 <hr />
 
-<div class="row"><div class="col-sm-4"><strong>Machine Name:</strong></div><div class="col-sm-4"> @Model.MachineName</div></div><hr />
-<div class="row"><div class="col-sm-4"><strong>Host Name:</strong></div><div class="col-sm-4"> @Model.HostName</div></div><hr />
-<div class="row"><div class="col-sm-4"><strong>CPU count:</strong></div><div class="col-sm-4"> @Model.ProcessorCount</div></div><hr />
+<div class="row"><div class="col-sm-4"><strong>Machine Name:</strong></div><div class="col-sm-4"> @Model.MachineName</div></div>
+<hr />
+<div class="row"><div class="col-sm-4"><strong>Host Name:</strong></div><div class="col-sm-4"> @Model.HostName</div></div>
+<hr />
+<div class="row"><div class="col-sm-4"><strong>CPU count:</strong></div><div class="col-sm-4"> @Model.ProcessorCount</div></div>
+<hr />
 
 <p><strong>IP4 Addresses:</strong></p>
-<hr/>
+<hr />
 <div>
     @{
-    foreach (var ip in Model.IpAddresses)
-    {
-        <div class="row"><div class="col-sm-4">@ip</div></div><hr />
-    }
+        foreach (var ip in Model.IpAddresses)
+        {
+            <div class="row"><div class="col-sm-4">@ip</div></div>
+
+            <hr />
+        }
     }
 </div>
 <p><strong>Environment Variables:</strong></p>
-<hr/>
+<hr />
 <div>
     @{
-    foreach (var env in Model.EnvironmentVariables)
-    {
-        <div class="row"><div class="col-sm-4">@env.Key</div><div class="col-sm-4">@env.Value</div></div><hr />
-    }
+        foreach (var env in Model.EnvironmentVariables)
+        {
+            <div class="row"><div class="col-sm-4">@env.Key</div><div class="col-sm-4">@env.Value</div></div>
+
+            <hr />
+        }
     }
 </div>
+
+<p><strong>Azure Default Credential:</strong></p>
+<p>@Model.AzureIdentity</p>
+
+

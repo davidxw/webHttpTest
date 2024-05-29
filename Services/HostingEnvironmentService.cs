@@ -1,8 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using Azure.Identity;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Threading.Tasks;
 using webHttpTest.Models;
 
 namespace webHttpTest.Services
@@ -32,6 +35,7 @@ namespace webHttpTest.Services
             environment.IpAddresses = _networkService.GetAllLocalIPv4();
             environment.EnvironmentVariables = GetEnvironmentVariables();
             environment.ProcessorCount = Environment.ProcessorCount;
+            environment.AzureIdentity = GetAzureDefaultIdentity().Result.ToString();
 
             return environment;
         }
@@ -46,6 +50,26 @@ namespace webHttpTest.Services
             }
 
             return envVariables.ToDictionary<string, string>();
+        }
+
+        private async Task<JwtSecurityToken> GetAzureDefaultIdentity()
+        {
+            try
+            {
+                var credential = new DefaultAzureCredential();
+                string[] scopes = new string[] { "https://graph.microsoft.com/.default" };
+                var token = await credential.GetTokenAsync(new Azure.Core.TokenRequestContext(scopes));
+
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(token.Token) as JwtSecurityToken;
+                //var upn = jsonToken.Claims.First(c => c.Type == "upn").Value;
+
+                return jsonToken;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
