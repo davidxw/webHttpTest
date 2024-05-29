@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using webHttpTest.Models;
 
 namespace webHttpTest.Services
@@ -37,14 +38,14 @@ namespace webHttpTest.Services
 
         private Dictionary<string, string> GetEnvironmentVariables()
         {
-            var envVariables = new Dictionary<string, string>();
+            var envVariables = new SortedDictionary<string, string>();
 
             foreach (DictionaryEntry item in Environment.GetEnvironmentVariables())
             {
                 envVariables.Add((string)item.Key, (string)item.Value);
             }
 
-            return envVariables;
+            return envVariables.ToDictionary<string, string>();
         }
     }
 }
