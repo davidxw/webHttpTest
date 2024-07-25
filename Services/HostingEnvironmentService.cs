@@ -35,7 +35,17 @@ namespace webHttpTest.Services
             environment.IpAddresses = _networkService.GetAllLocalIPv4();
             environment.EnvironmentVariables = GetEnvironmentVariables();
             environment.ProcessorCount = Environment.ProcessorCount;
-            environment.AzureIdentity = GetAzureDefaultIdentity().Result.ToString();
+
+            var azureIndentityResult = GetAzureDefaultIdentity().Result;
+
+            if (azureIndentityResult != null)
+            {
+                environment.AzureIdentity = azureIndentityResult.ToString();
+            }
+            else
+            {
+                environment.AzureIdentity = "No Azure Identity Found";
+            }
 
             return environment;
         }
