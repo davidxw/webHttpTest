@@ -57,19 +57,10 @@ jobs:
           
       - name: Install Azure CLI
         run: |
-          wget https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer
-          bash pyenv-installer
-          export PYENV_ROOT="$HOME/.pyenv"
-          export PATH="$PYENV_ROOT/bin:$PATH"
-          if command -v pyenv 1>/dev/null 2>&1; then
-            eval "$(pyenv init -)"
-          fi
-          bash
-          # Install the latest Python from source code
-          pyenv install 3.9.6
-          pyenv versions
-          # Switch Python version
-          pyenv global 3.9.6
+          apt update -y
+          apt install python3 -y
+          curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+          
         
       - name: Login to Azure
         uses: azure/login@v2
