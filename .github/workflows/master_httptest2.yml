@@ -57,7 +57,7 @@ jobs:
           
       - name: Install Azure CLI
         run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+          pip install azure-cli
           
         
       - name: Login to Azure
