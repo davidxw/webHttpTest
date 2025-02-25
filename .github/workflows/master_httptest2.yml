@@ -62,6 +62,11 @@ jobs:
           export PATH="/home/runner/.local/bin:$PATH"
           EOF
           . ~/.bashrc
+
+      - name: test
+        run: |
+          echo $PATH
+          cat .bashrc
                   
       - name: Login to Azure
         uses: azure/login@v2
