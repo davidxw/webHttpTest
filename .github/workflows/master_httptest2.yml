@@ -57,8 +57,6 @@ jobs:
           
       - name: Install Azure CLI
         run: |
-          apt update -y
-          apt install python3 -y
           curl -sL https://aka.ms/InstallAzureCLIDeb | bash
           
         
