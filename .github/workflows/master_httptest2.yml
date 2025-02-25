@@ -58,6 +58,7 @@ jobs:
       - name: Install Azure CLI
         run: |
           pip install azure-cli
+          export PATH="/home/runner/.local/bin:$PATH"
           cat >> .bashrc << 'EOF'
           export PATH="/home/runner/.local/bin:$PATH"
           EOF
