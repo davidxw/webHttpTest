@@ -58,7 +58,10 @@ jobs:
       - name: Install Azure CLI
         run: |
           pip install azure-cli
+          cat >> .bashrc << 'EOF'
           export PATH="/home/runner/.local/bin:$PATH"
+          EOF
+          . ~/.bashrc
                   
       - name: Login to Azure
         uses: azure/login@v2
