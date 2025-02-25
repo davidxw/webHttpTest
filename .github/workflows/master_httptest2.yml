@@ -57,6 +57,7 @@ jobs:
           
       - name: Install Azure CLI
         run: |
+          sudo apt update && sudo apt install python3.9
           curl -L https://aka.ms/InstallAzureCli | bash
         
       - name: Login to Azure
