@@ -55,19 +55,10 @@ jobs:
         with:
           name: .net-app
           
-      - name: Install Azure CLI
-        run: |
-          pip install azure-cli
-          export PATH="/home/runner/.local/bin:$PATH"
-          cat >> .bashrc << 'EOF'
-          export PATH="/home/runner/.local/bin:$PATH"
-          EOF
-          . ~/.bashrc
-
       - name: test
         run: |
           echo $PATH
-          cat .bashrc
+          az --version
                   
       - name: Login to Azure
         uses: azure/login@v2
