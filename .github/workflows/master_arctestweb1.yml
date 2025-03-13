@@ -1,12 +1,13 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - arctestweb1
-
+name: Build and publish container image
 on:
   push:
     branches:
       - master
+    paths-ignore:
+      - '.github/workflows/**'
   workflow_dispatch:
 
 jobs:
@@ -44,10 +45,5 @@ jobs:
           davidxw/webtest:latest,
           davidxw/webtest:${{ github.run_number }}
 
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
-      with:
-        name: .net-app
-        path: ${{env.DOTNET_ROOT}}/myapp
 
   
