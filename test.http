@@ -1,0 +1,32 @@
+﻿@host = https://localhost:51327
+
+# Get environment information
+GET {{host}}/api/environment
+
+###
+
+# Generate load with cpu=20% and duration=5000 milliseconds
+GET {{host}}/api/work?cpu=20&duration=5000
+
+###
+
+# Get www.microsoft.com from app service
+GET {{host}}/api/get?url=https%3A%2F%2Fwww.microsoft.com
+
+###
+
+# Echo
+GET {{host}}/api/echo
+
+###
+
+# Echo
+GET {{host}}/api/echo/hello?parm1=1&param2=2
+
+###
+
+# Echo
+POST {{host}}/api/echo?parm1=1&param2=2
+CUSTOM_HEADER:value
+
+Body

@@ -102,6 +102,7 @@ namespace webHttpTest.Controllers
                     }
 
                     var httpClientHandler = new HttpClientHandler();
+
                     httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) =>
                     {
 

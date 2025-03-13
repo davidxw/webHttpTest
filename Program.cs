@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using webHttpTest.api;
 using webHttpTest.Hubs;
+using webHttpTest.Models;
 using webHttpTest.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -88,6 +91,13 @@ app.MapGet("/api/get", async (string url) =>
     }
 
     return result;
+});
+
+app.Map("/api/echo/{*path}", async(HttpRequest httpRequest) =>
+{
+    Console.WriteLine($"{DateTime.Now} - Recieved echo request for {httpRequest.Path}");
+    
+    return await httpRequest.ToEchoResponseAsync();
 });
 
 app.Run();
