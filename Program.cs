@@ -23,6 +23,9 @@ builder.Services.AddSignalR();
 builder.Services.AddSingleton<INetworkService, NetworkService>();
 builder.Services.AddSingleton<IHostingEnvironmentService, HostingEnvironmentService>();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,16 +45,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.MapControllerRoute(
-name: "default",
-pattern: "{controller=Home}/{action=Index}/{id?}");
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<TraceRtHub>("/traceRtHub");
-});
-
-// quick and dirty api
+app.MapHub<TraceRtHub>("/traceRtHub");
 
 app.MapGet("/api/environment", (IHostingEnvironmentService hostingEnvironmentService) =>
 {
@@ -93,13 +94,11 @@ app.MapGet("/api/get", async (string url) =>
     return result;
 });
 
-app.Map("/api/echo/{*path}", async(HttpRequest httpRequest) =>
+app.Map("/api/echo/{*path}", async (HttpRequest httpRequest) =>
 {
     Console.WriteLine($"{DateTime.Now} - Recieved echo request for {httpRequest.Path}");
-    
+
     return await httpRequest.ToEchoResponseAsync();
 });
 
 app.Run();
-
-
