@@ -54,6 +54,11 @@ app.MapControllerRoute(
 
 app.MapHub<TraceRtHub>("/traceRtHub");
 
+app.MapGet("/api/ping", () =>
+{
+    return "Hello";
+});
+
 app.MapGet("/api/environment", (IHostingEnvironmentService hostingEnvironmentService) =>
 {
     Console.WriteLine($"{DateTime.Now} - Recieved HostEnvironment request");
