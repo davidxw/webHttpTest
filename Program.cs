@@ -54,11 +54,6 @@ app.MapControllerRoute(
 
 app.MapHub<TraceRtHub>("/traceRtHub");
 
-app.MapGet("/api/ping", () =>
-{
-    return "Hello";
-});
-
 app.MapGet("/api/environment", (IHostingEnvironmentService hostingEnvironmentService) =>
 {
     Console.WriteLine($"{DateTime.Now} - Recieved HostEnvironment request");
@@ -104,6 +99,21 @@ app.Map("/api/echo/{*path}", async (HttpRequest httpRequest) =>
     Console.WriteLine($"{DateTime.Now} - Recieved echo request for {httpRequest.Path}");
 
     return await httpRequest.ToEchoResponseAsync();
+});
+
+app.MapGet("/api/ping", () =>
+{
+    return "Hello";
+});
+
+app.MapGet("/api/health", () =>
+{
+    return "Hello";
+});
+
+app.MapGet("/api/healthz", () =>
+{
+    return "Hello";
 });
 
 app.Run();
