@@ -106,6 +106,11 @@ app.MapGet("/api/ping", () =>
     return "Hello";
 });
 
+app.MapGet("/api/ping_json", () =>
+{
+    return "\"Hello\"";
+});
+
 app.MapGet("/api/health", () =>
 {
     return "Hello";
