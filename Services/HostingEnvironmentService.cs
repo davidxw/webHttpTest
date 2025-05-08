@@ -63,8 +63,6 @@ namespace webHttpTest.Services
                 }
             }
 
-            environment.AzureEasyAuthName = "David W";
-
             return environment;
         }
 
