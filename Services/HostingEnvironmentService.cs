@@ -1,4 +1,5 @@
 ﻿using Azure.Identity;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -13,20 +14,27 @@ namespace webHttpTest.Services
     public class HostingEnvironmentService : IHostingEnvironmentService
     {
         private INetworkService _networkService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly HostingEnvironment _hostingEnvironment;
 
-        public HostingEnvironmentService(INetworkService networkService)
+        public HostingEnvironmentService(INetworkService networkService, IHttpContextAccessor httpContextAccessor)
         {
             _networkService = networkService;
+            _httpContextAccessor = httpContextAccessor;
+            _hostingEnvironment = getHostingEnvironment();
+        }
+
+        public HostingEnvironment GetHostingEnvironment()
+        {
+            return _hostingEnvironment;
         }
 
         public string PrintHostingEnvironment()
         {
-            var hostingEnvironment = GetHostingEnvironment();
-
-            return JsonConvert.SerializeObject(hostingEnvironment, Formatting.Indented);
+            return JsonConvert.SerializeObject(_hostingEnvironment, Formatting.Indented);
         }
 
-        public HostingEnvironment GetHostingEnvironment()
+        private HostingEnvironment getHostingEnvironment()
         {
             var environment = new HostingEnvironment();
 
@@ -46,6 +54,16 @@ namespace webHttpTest.Services
             {
                 environment.AzureIdentity = "No Azure Identity Found";
             }
+
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                if (_httpContextAccessor.HttpContext.Request.Headers.ContainsKey("X-MS-CLIENT-PRINCIPAL-NAME"))
+                {
+                    environment.AzureEasyAuthName = _httpContextAccessor.HttpContext.Request.Headers["X-MS-CLIENT-PRINCIPAL-NAME"].ToString(); ;
+                }
+            }
+
+            environment.AzureEasyAuthName = "David W";
 
             return environment;
         }

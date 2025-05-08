@@ -19,5 +19,7 @@ namespace webHttpTest.Models
         public Dictionary<string, string> EnvironmentVariables { get; set; }
 
         public string AzureIdentity { get; set; }
+
+        public string AzureEasyAuthName { get; set; }
     }
 }
